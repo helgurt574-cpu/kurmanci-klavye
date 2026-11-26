@@ -98,8 +98,6 @@ Gereksinimler: JDK 21, Android SDK (API 36). Harici bağımlılık yok (yalnızc
 | `tools/` | Sözlük kaynakları ve üretim betikleri |
 | `store/` | Play Store metinleri, görseller, gizlilik politikası |
 
-Ayrıntılı mimari notları: [CLAUDE.md](CLAUDE.md).
-
 ### Sözlüğe katkı
 
 Elle düzeltilmiş kelimeler `tools/tr_ku.txt` dosyasındadır ve her zaman önceliklidir. Biçim:

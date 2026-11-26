@@ -57,7 +57,7 @@ Kurmancî konuşan ama Kurmancî yazmakta zorlanan, Türkçe klavyeye alışmı�
 
 ### Sınırlar
 
-Çeviriler sözlük ve kurallarla yapılır, yapay zekâ ile değil; bu yüzden **yaklaşıktır**. Kurmancî isimlerin cinsiyeti bilinmediği için ezafe çoğunlukla eril (-ê) çıkar ve yalnızca ~45 yaygın fiil çekilebilir. Sözlük henüz bir Kurmancî anadili konuşucusu tarafından gözden geçirilmedi. Düzeltmeler çok değerli; [issue açın](../../issues) ya da `tools/tr_ku.txt` dosyasına pull request gönderin.
+Çeviriler sözlük ve kurallarla yapılır, yapay zekâ ile değil; bu yüzden **yaklaşıktır**. Kurmancî isimlerin cinsiyeti bilinmediği için ezafe çoğunlukla eril (-ê) çıkar ve yalnızca ~45 yaygın fiil çekilebilir. Düzeltmeler çok değerli; [issue açın](../../issues) ya da `tools/tr_ku.txt` dosyasına pull request gönderin.
 
 ---
 
@@ -67,7 +67,7 @@ Kurmancî konuşan ama Kurmancî yazmakta zorlanan, Türkçe klavyeye alışmı�
 
 Features: 65k-entry offline Turkish→Kurmanji dictionary with suffix stripping and accent-insensitive lookup; rule-based sentence translation (verb conjugation, ergative past, motion-verb word order); a Kurmanji layout with word completion; Kurmanji→Turkish gist for copied text; user-editable dictionary that learns your picks; emoji, clipboard history, 17 themes.
 
-Translations are rule-based and approximate, and the dictionary has not been reviewed by a native speaker yet — corrections are welcome.
+Translations are rule-based and approximate — corrections are welcome.
 
 ---
 

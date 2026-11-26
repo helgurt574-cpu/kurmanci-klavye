@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- System look (One UI on Samsung). No action bar: the page draws its own large title, One UI style. -->
+    <style name="SettingsTheme" parent="android:Theme.DeviceDefault.Light">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+</resources>

@@ -1,0 +1,14 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+.kotlin/
+
+# Upload key and its passwords: back these up, never commit them.
+signing/
+*.jks
+
+# Build outputs and store binaries: published as GitHub release assets, not committed.
+*.apk
+*.aab

@@ -1,0 +1,6 @@
+01 = Türkçe yazın, Kurmancî seçin | Her kelimenin karşılığı klavyenin üstünde
+02 = Cümlenin tamamını çevirin | Tek dokunuşla Kurmancî cümle
+03 = Doğrudan Kurmancî yazın | ê, î, û tuşları ve kelime tamamlama
+04 = Kurmancî mesajı Türkçe okuyun | Kopyalayın, Türkçesi klavyede
+05 = Emoji ve 17 renkli tema | İnternetsiz, gizli, tamamen ücretsiz
+06 = Size göre ayarlayın | Tema, yükseklik, titreşim, kendi kelimeleriniz

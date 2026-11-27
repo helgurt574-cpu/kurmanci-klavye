@@ -14,7 +14,42 @@ bilgisayarınızdan hiçbir yere gitmez.
 
 ---
 
-## Kurulum (bir kerelik, yaklaşık 15–30 dakika)
+## Kolay kurulum: hazır paketi indirin (Xcode gerekmez, ~5 dakika)
+
+1. <https://github.com/helgurt574-cpu/kurmanci-klavye/releases> sayfasında adı **mac-v** ile başlayan sürümü
+   bulun ve **KurmanciKlavye-mac.zip** dosyasını indirin.
+2. **Terminal**'i açın (⌘ + Boşluk → `Terminal` → Return) ve şu satırları tek tek yapıştırıp Return'e basın:
+
+   ```bash
+   cd ~/Downloads && { [ -d KurmanciKlavye.app ] || ditto -x -k KurmanciKlavye-mac.zip . ; } && ls -d KurmanciKlavye.app
+   ```
+
+   ```bash
+   mkdir -p ~/Library/Input\ Methods && rm -rf ~/Library/Input\ Methods/KurmanciKlavye.app && mv ~/Downloads/KurmanciKlavye.app ~/Library/Input\ Methods/
+   ```
+
+   ```bash
+   xattr -dr com.apple.quarantine ~/Library/Input\ Methods/KurmanciKlavye.app
+   ```
+
+   ```bash
+   ~/Library/Input\ Methods/KurmanciKlavye.app/Contents/MacOS/KurmanciKlavye --register
+   ```
+
+3. Aşağıdaki **4. adımla** (girdi kaynağı olarak ekleme) devam edin.
+
+**`xattr` satırı neden gerekli?** Paket, Apple'a ücretli geliştirici hesabıyla imzalatılmadı. macOS internetten
+inen imzasız programları ("Gatekeeper" denetimi) engeller ve klavye hiç açılmaz ya da "açılamıyor, geliştirici
+doğrulanamadı" uyarısı çıkar. Bu satır yalnızca bu paketin üzerindeki "internetten indirildi" işaretini kaldırır.
+Normal uygulamalarda sağ tık → **Aç** da aynı işi görür, ama girdi kaynakları bir pencere olarak açılmadığı için
+burada Terminal yolu gerekir.
+
+Bu paket, GitHub'ın Mac sunucularında bu klasördeki kaynak koddan otomatik derlenir
+(`.github/workflows/mac.yml`). Kendiniz derlemek isterseniz aşağıdaki adımları izleyin.
+
+---
+
+## Kaynaktan derleyerek kurulum (yaklaşık 15–30 dakika)
 
 ### 1. Apple'ın geliştirici araçlarını yükleyin
 

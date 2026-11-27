@@ -20,25 +20,11 @@ jobs:
           # Intel, like the user's Mac. The .app from this job is the one published.
           - name: intel
             runner: macos-15-intel
-            xcode: latest
             publish: true
-          # Oldest Xcode 15 available: closest to the Swift 5.9 toolchain that macOS 13 Ventura gets.
-          - name: xcode15
-            runner: macos-14
-            xcode: oldest15
           - name: apple-silicon
             runner: macos-15
-            xcode: latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Select Xcode
-        if: matrix.xcode == 'oldest15'
-        run: |
-          ls -d /Applications/Xcode*.app
-          xc=$(ls -d /Applications/Xcode_15*.app | sort -V | head -1)
-          echo "Using $xc"
-          sudo xcode-select -s "$xc/Contents/Developer"
 
       - name: Toolchain
         run: |
@@ -82,9 +68,20 @@ jobs:
           name: KurmanciKlavye-mac
           path: mac/build/KurmanciKlavye-mac.zip
 
+  # macOS 13 Ventura's Command Line Tools ship Swift 5.9, older than any macOS runner image: check the package
+  # manifest and the core logic with that compiler.
+  swift59:
+    runs-on: ubuntu-latest
+    container: swift:5.9
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unit tests (Swift 5.9)
+        working-directory: mac
+        run: swift --version && swift test
+
   release:
     if: startsWith(github.ref, 'refs/tags/mac-v')
-    needs: build
+    needs: [build, swift59]
     runs-on: ubuntu-latest
     permissions:
       contents: write

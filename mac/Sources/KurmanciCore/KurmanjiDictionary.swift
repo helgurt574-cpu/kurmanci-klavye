@@ -196,8 +196,19 @@ public final class KurmanjiDictionary {
 
     public static let tr = Locale(identifier: "tr")
 
-    public static func normalize(_ s: String) -> String {
-        s.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(with: tr)
+    public static func normalize<S: StringProtocol>(_ s: S) -> String {
+        let t = trimmed(s)
+        // Most input is already lowercase; Foundation's locale-aware lowercasing is comparatively slow.
+        if !t.unicodeScalars.contains(where: { $0.properties.changesWhenLowercased }) { return String(t) }
+        return t.lowercased(with: tr)
+    }
+
+    /// Strips leading and trailing whitespace without going through Foundation (hot in [parse]).
+    static func trimmed<S: StringProtocol>(_ s: S) -> S.SubSequence {
+        var start = s.startIndex, end = s.endIndex
+        while start < end && s[start].isWhitespace { start = s.index(after: start) }
+        while end > start && s[s.index(before: end)].isWhitespace { end = s.index(before: end) }
+        return s[start..<end]
     }
 
     private static let foldMap: [Character: Character] = [
@@ -288,31 +299,43 @@ public final class KurmanjiDictionary {
     public static func parse(_ data: Data) -> KurmanjiDictionary {
         var order: [String] = []
         var map: [String: [String]] = [:]
-        data.withUnsafeBytes { (buf: UnsafeRawBufferPointer) in
-            let bytes = buf.bindMemory(to: UInt8.self)
+        // Works on bytes: tab, '|', '#' and the whitespace trimmed (bytes <= 0x20, like Kotlin's trim) are all
+        // ASCII, so they never occur inside a multi-byte UTF-8 letter. Character-level scanning is much slower.
+        data.withUnsafeBytes { (raw: UnsafeRawBufferPointer) in
+            let bytes = raw.bindMemory(to: UInt8.self)
+            func text(_ from: Int, _ to: Int) -> String? {
+                var a = from, b = to
+                while a < b && bytes[a] <= 0x20 { a += 1 }
+                while b > a && bytes[b - 1] <= 0x20 { b -= 1 }
+                return a < b ? String(decoding: UnsafeBufferPointer(rebasing: bytes[a..<b]), as: UTF8.self) : nil
+            }
             var lineStart = 0
             for i in 0...bytes.count {
                 guard i == bytes.count || bytes[i] == 0x0A else { continue }
                 defer { lineStart = i + 1 }
-                guard i > lineStart else { continue }
-                let line = String(decoding: UnsafeBufferPointer(rebasing: bytes[lineStart..<i]), as: UTF8.self)
-                    .trimmingCharacters(in: .whitespacesAndNewlines)
-                if line.isEmpty || line.hasPrefix("#") { continue }
-                guard let tab = line.firstIndex(of: "\t"), tab != line.startIndex else { continue }
-                var key = normalize(String(line[..<tab]))
+                var a = lineStart
+                while a < i && bytes[a] <= 0x20 { a += 1 }
+                guard a < i, bytes[a] != 0x23 /* # */ else { continue }
+                var tab = a
+                while tab < i && bytes[tab] != 0x09 { tab += 1 }
+                guard tab > a, tab < i, let rawKey = text(a, tab) else { continue }
+                var key = normalize(rawKey)
                 if key.contains("  ") {
                     key = key.split(whereSeparator: { $0.isWhitespace }).joined(separator: " ")
                 }
-                let values = line[line.index(after: tab)...].split(separator: "|")
-                    .map { $0.trimmingCharacters(in: .whitespaces) }
-                    .filter { !$0.isEmpty }
+                var values: [String] = []
+                var v = tab + 1
+                for j in (tab + 1)...i where j == i || bytes[j] == 0x7C /* | */ {
+                    if let value = text(v, j), !values.contains(value) { values.append(value) }
+                    v = j + 1
+                }
                 if values.isEmpty { continue }
                 if var list = map[key] {
                     for v in values where !list.contains(v) { list.append(v) }
                     map[key] = list
                 } else {
                     order.append(key)
-                    map[key] = distinct(values)
+                    map[key] = values
                 }
             }
         }

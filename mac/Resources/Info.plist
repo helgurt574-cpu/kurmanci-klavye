@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>tr</string>
+	<key>CFBundleDisplayName</key>
+	<string>Kurmancî Klavye</string>
+	<key>CFBundleExecutable</key>
+	<string>KurmanciKlavye</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.klavye.inputmethod.Kurmanci</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Kurmancî Klavye</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>13.0</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>InputMethodConnectionName</key>
+	<string>com.klavye.inputmethod.Kurmanci_Connection</string>
+	<key>InputMethodServerControllerClass</key>
+	<string>KurmanciInputController</string>
+	<key>TISInputSourceID</key>
+	<string>com.klavye.inputmethod.Kurmanci</string>
+	<key>TISIntendedLanguage</key>
+	<string>tr</string>
+	<key>tsInputMethodCharacterRepertoireKey</key>
+	<array>
+		<string>Latn</string>
+	</array>
+	<key>tsInputMethodIconFileKey</key>
+	<string>icon.tiff</string>
+	<key>ComponentInputModeDict</key>
+	<dict>
+		<key>tsInputModeListKey</key>
+		<dict>
+			<key>com.klavye.inputmethod.Kurmanci.Kurmanci</key>
+			<dict>
+				<key>TISInputSourceID</key>
+				<string>com.klavye.inputmethod.Kurmanci.Kurmanci</string>
+				<key>TISIntendedLanguage</key>
+				<string>tr</string>
+				<key>TISIconIsTemplate</key>
+				<true/>
+				<key>tsInputModeAlternateMenuIconFileKey</key>
+				<string>icon.tiff</string>
+				<key>tsInputModeMenuIconFileKey</key>
+				<string>icon.tiff</string>
+				<key>tsInputModePaletteIconFileKey</key>
+				<string>icon.tiff</string>
+				<key>tsInputModeDefaultStateKey</key>
+				<true/>
+				<key>tsInputModeIsVisibleKey</key>
+				<true/>
+				<key>tsInputModePrimaryInScriptKey</key>
+				<true/>
+				<key>tsInputModeScriptKey</key>
+				<string>smRoman</string>
+			</dict>
+		</dict>
+		<key>tsVisibleInputModeOrderedArrayKey</key>
+		<array>
+			<string>com.klavye.inputmethod.Kurmanci.Kurmanci</string>
+		</array>
+	</dict>
+</dict>
+</plist>

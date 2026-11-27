@@ -8,6 +8,11 @@ if CommandLine.arguments.contains("--register") {
     exit(0)
 }
 
+// `KurmanciKlavye --selftest`: checks the built bundle without a login session (used by CI).
+if CommandLine.arguments.contains("--selftest") {
+    exit(SelfTest.run() ? 0 : 1)
+}
+
 let connectionName = Bundle.main.object(forInfoDictionaryKey: "InputMethodConnectionName") as! String
 let server = IMKServer(name: connectionName, bundleIdentifier: Bundle.main.bundleIdentifier)
 Shared.loadDictionary()

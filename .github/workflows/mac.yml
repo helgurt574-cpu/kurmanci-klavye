@@ -1,0 +1,102 @@
+name: Mac
+
+on:
+  push:
+    branches: [main]
+    paths: ['mac/**', 'app/src/main/assets/tr_ku.tsv', '.github/workflows/mac.yml']
+    tags: ['mac-v*']
+  pull_request:
+    paths: ['mac/**', '.github/workflows/mac.yml']
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Intel, like the user's Mac. The .app from this job is the one published.
+          - name: intel
+            runner: macos-15-intel
+            xcode: latest
+            publish: true
+          # Oldest Xcode 15 available: closest to the Swift 5.9 toolchain that macOS 13 Ventura gets.
+          - name: xcode15
+            runner: macos-14
+            xcode: oldest15
+          - name: apple-silicon
+            runner: macos-15
+            xcode: latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        if: matrix.xcode == 'oldest15'
+        run: |
+          ls -d /Applications/Xcode*.app
+          xc=$(ls -d /Applications/Xcode_15*.app | sort -V | head -1)
+          echo "Using $xc"
+          sudo xcode-select -s "$xc/Contents/Developer"
+
+      - name: Toolchain
+        run: |
+          sw_vers
+          uname -m
+          swift --version
+
+      - name: Unit tests
+        working-directory: mac
+        run: swift test
+
+      - name: Build universal app
+        working-directory: mac
+        run: bash build.sh
+
+      - name: Check bundle
+        working-directory: mac
+        run: |
+          app=build/KurmanciKlavye.app
+          plutil -lint "$app/Contents/Info.plist"
+          archs=$(lipo -archs "$app/Contents/MacOS/KurmanciKlavye")
+          echo "archs: $archs"
+          [[ "$archs" == *x86_64* && "$archs" == *arm64* ]]
+          codesign --verify --verbose "$app"
+          "$app/Contents/MacOS/KurmanciKlavye" --selftest
+
+      - name: Install into ~/Library/Input Methods and register
+        working-directory: mac
+        run: |
+          bash build.sh install
+          ls -la "$HOME/Library/Input Methods"
+
+      - name: Zip
+        if: matrix.publish
+        working-directory: mac/build
+        run: ditto -c -k --keepParent KurmanciKlavye.app KurmanciKlavye-mac.zip
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.publish
+        with:
+          name: KurmanciKlavye-mac
+          path: mac/build/KurmanciKlavye-mac.zip
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/mac-v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: KurmanciKlavye-mac
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" KurmanciKlavye-mac.zip \
+            --repo "$GITHUB_REPOSITORY" --prerelease \
+            --title "Kurmancî Klavye Mac ${GITHUB_REF_NAME#mac-v}" \
+            --notes "macOS 13+ (Intel ve Apple Silicon) için Kurmancî Klavye girdi kaynağı. Kurulum: mac/README.md"

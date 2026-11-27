@@ -28,8 +28,9 @@ enum SelfTest {
         }
         let start = Date()
         let dict = KurmanjiDictionary.parse(data)
-        print(String(format: "     dictionary: %d entries, %.0f ms", dict.size, Date().timeIntervalSince(start) * 1000))
-        check("dictionary loaded", dict.size > 50_000)
+        let ms = Int(Date().timeIntervalSince(start) * 1000)
+        check("dictionary loaded: \(dict.size) entries", dict.size > 50_000)
+        check("dictionary parsed in \(ms) ms (< 2000)", ms < 2000)
         let composer = Composer(dictionary: dict)
         _ = composer.type("Ben eve gidiyorum")
         let first = composer.candidates.first?.kurmanji ?? "-"

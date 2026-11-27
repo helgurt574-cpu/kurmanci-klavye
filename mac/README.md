@@ -8,9 +8,10 @@ bilgisayarınızdan hiçbir yere gitmez.
 - Intel ve Apple Silicon (M1/M2/M3…) Mac'lerde çalışır
 - Android uygulaması (APK) Mac'e kurulamaz; bu klasör Mac için ayrı yazılmış bir sürümdür.
 
-> **Durum:** Bu sürüm Linux'ta hazırlandı. Sözlük ve çeviri kısmı test edildi (Android sürümüyle aynı sonuçları
-> veriyor), ama Mac'e özgü kısım (girdi kaynağı ve öneri penceresi) henüz gerçek bir Mac'te derlenip denenmedi.
-> Derlerken hata çıkarsa ekrandaki mesajın tamamını kopyalayıp gönderin.
+> **Durum:** Her değişiklikte GitHub'ın Intel ve Apple Silicon Mac sunucularında otomatik olarak derleniyor ve
+> test ediliyor: sözlük ve çeviri testleri (Android sürümüyle aynı sonuçlar), paketin kendi kendini denetlemesi ve
+> macOS'a girdi kaynağı olarak kaydı başarılı. Gerçek bir uygulamada klavyeyle yazarak deneme ise henüz yapılmadı;
+> bir sorun görürseniz ekran görüntüsü veya mesajın tamamıyla bildirin.
 
 ---
 
@@ -18,6 +19,11 @@ bilgisayarınızdan hiçbir yere gitmez.
 
 1. <https://github.com/helgurt574-cpu/kurmanci-klavye/releases> sayfasında adı **mac-v** ile başlayan sürümü
    bulun ve **KurmanciKlavye-mac.zip** dosyasını indirin.
+
+   Releases sayfasında henüz Mac sürümü yoksa: GitHub hesabınızla giriş yapıp
+   <https://github.com/helgurt574-cpu/kurmanci-klavye/actions/workflows/mac.yml> sayfasında en üstteki yeşil ✓
+   çalışmayı açın ve en alttaki **KurmanciKlavye-mac** dosyasını indirin. İndirilenler klasöründe
+   **KurmanciKlavye.app** görünene kadar inen ZIP dosyalarına çift tıklayın.
 2. **Terminal**'i açın (⌘ + Boşluk → `Terminal` → Return) ve şu satırları tek tek yapıştırıp Return'e basın:
 
    ```bash
